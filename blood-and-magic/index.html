@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Blood &amp; Magic · Arcade</title>
+  <meta name="description" content="The 1996 Blood &amp; Magic non-interactive preview, played in the browser from its original Smacker data.">
+  <meta name="theme-color" content="#0b0d0a">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M16 2 4 8v8c0 7 5 12 12 14 7-2 12-7 12-14V8z' fill='%23233a1c' stroke='%23c9a64b' stroke-width='2'/%3E%3Cpath d='M16 9c-2 3-4 5-4 8a4 4 0 0 0 8 0c0-3-2-5-4-8z' fill='%23b3262d'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <script type="module" src="js/player.js"></script>
+</head>
+<body>
+  <header class="top">
+    <a class="back" href="../">&larr; Arcade</a>
+    <div class="heading">
+      <h1>Blood <span class="amp">&amp;</span> Magic</h1>
+      <p class="sub">Non-interactive preview &middot; Tachyon Studios / Interplay &middot; 1996</p>
+    </div>
+  </header>
+
+  <main>
+    <section id="player" class="player" aria-label="Blood &amp; Magic preview player">
+      <div class="screen">
+        <canvas id="screen" aria-label="Video"></canvas>
+        <div class="crt-mask" aria-hidden="true"></div>
+
+        <div id="overlay" class="overlay" data-state="loading">
+          <div class="pane loading">
+            <div class="sigil" aria-hidden="true"></div>
+            <p id="loading-label">Loading</p>
+            <div id="loading-bar" class="bar"><span></span></div>
+          </div>
+          <div class="pane start">
+            <canvas id="poster" width="640" height="480" aria-hidden="true"></canvas>
+            <button id="start" class="big-play" type="button">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg>
+              <span>Play the preview</span>
+            </button>
+            <p class="hint">3 min 12 s &middot; sound on</p>
+          </div>
+          <div class="pane end">
+            <button id="replay" class="big-play" type="button">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5V2L7 6l5 4V7a6 6 0 1 1-6 6H4a8 8 0 1 0 8-8z"/></svg>
+              <span>Watch again</span>
+            </button>
+          </div>
+          <div class="pane error">
+            <p id="error-title" class="err-title"></p>
+            <p id="error-body"></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="controls">
+        <div class="timeline">
+          <div id="ticks" class="ticks" aria-hidden="true"></div>
+          <input id="scrub" type="range" min="0" max="1" step="any" value="0" aria-label="Seek">
+          <div id="preview" class="preview" aria-hidden="true">
+            <canvas width="192" height="144"></canvas>
+            <span id="preview-title"></span>
+            <span id="preview-time"></span>
+          </div>
+        </div>
+        <div class="row">
+          <button id="play" class="icon" type="button" aria-label="Play">
+            <svg class="i-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg>
+            <svg class="i-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/></svg>
+          </button>
+          <div class="volume">
+            <button id="mute" class="icon" type="button" aria-label="Mute">
+              <svg class="i-vol" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4z"/><path d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              <svg class="i-mute" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4z"/><path d="m16.5 9.5 5 5m0-5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            </button>
+            <input id="volume" type="range" min="0" max="1" step="0.01" value="0.8" aria-label="Volume">
+          </div>
+          <div class="time"><span id="cur">0:00</span> <span class="sep">/</span> <span id="dur">0:00</span></div>
+          <div class="where">
+            <span id="chapter-name"></span>
+            <span id="frame" class="frame"></span>
+          </div>
+          <button id="loop" class="icon toggle" type="button" aria-label="Loop" aria-pressed="true" title="Loop (attract mode)">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17 4l3 3-3 3M20 7H8a4 4 0 0 0-4 4v1M7 20l-3-3 3-3M4 17h12a4 4 0 0 0 4-4v-1" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <button id="crt" class="icon toggle" type="button" aria-label="CRT effect" aria-pressed="true" title="CRT effect (C)">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="13" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M6 8h12M6 11h12M6 14h12" stroke="currentColor" stroke-width="1"/><path d="M8 21h8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          </button>
+          <button id="fullscreen" class="icon" type="button" aria-label="Fullscreen" title="Fullscreen (F)">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section id="chapters-section" class="chapters-section" hidden>
+      <h2>Scenes</h2>
+      <ol id="chapters" class="chapters"></ol>
+    </section>
+
+    <section class="about">
+      <div>
+        <h2>About this port</h2>
+        <p>
+          In 1996 this preview shipped as <code>BAM_DEMO.EXE</code>, a DOS/4GW program that streamed a
+          Smacker movie from CD and ran a small script for palette fades and music fades.
+          This page does the same job in the browser. It reads the <em>original</em> <code>BAMDEMOF</code>
+          movie and <code>DEMOF.SCR</code> script and decodes them in JavaScript. The original video
+          and audio are not converted, and nothing needs installing.
+        </p>
+        <ul>
+          <li>A Smacker 2 decoder covers the Huffman trees, the four block types, palette deltas and DPCM audio. Its output matches ffmpeg on every frame, and the audio is bit-exact.</li>
+          <li>Fades are done the way the VGA hardware did them, by scaling the 6-bit palette. They are just smoothed to your display's refresh rate instead of stepping at 9&nbsp;fps.</li>
+          <li>The music and effects tracks are mixed separately, so the script's music fade-in and fade-out work as written.</li>
+          <li>Scaling uses sharp bilinear filtering at the 4:3 shape a CRT gave it, with an optional scanline mask. You can seek and step frame by frame, and pick scenes from the list.</li>
+        </ul>
+      </div>
+      <div>
+        <h2>Keyboard</h2>
+        <dl class="keys">
+          <dt><kbd>Space</kbd> <kbd>K</kbd></dt><dd>Play / pause</dd>
+          <dt><kbd>&larr;</kbd> <kbd>&rarr;</kbd></dt><dd>Seek 5 s (<kbd>Shift</kbd> 30 s)</dd>
+          <dt><kbd>,</kbd> <kbd>.</kbd></dt><dd>Step one frame</dd>
+          <dt><kbd>P</kbd> <kbd>N</kbd></dt><dd>Previous / next scene</dd>
+          <dt><kbd>0</kbd>&ndash;<kbd>9</kbd></dt><dd>Jump to 0&ndash;90%</dd>
+          <dt><kbd>&uarr;</kbd> <kbd>&darr;</kbd></dt><dd>Volume</dd>
+          <dt><kbd>M</kbd></dt><dd>Mute</dd>
+          <dt><kbd>C</kbd></dt><dd>CRT effect</dd>
+          <dt><kbd>F</kbd></dt><dd>Fullscreen</dd>
+        </dl>
+        <p class="small">You can drop any Smacker <code>.smk</code> file onto the page to play it. You can also link to a moment with <code>?frame=605</code> or <code>?t=90</code>.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    Blood &amp; Magic &copy; 1996 Tachyon Studios. Blood &amp; Magic is a trademark of TSR; Interplay is a trademark of Interplay Productions.
+    The preview data is the freely distributed non-interactive demo, shown here for personal, non-commercial use.
+  </footer>
+
+  <div class="drop-hint" aria-hidden="true"><span>Drop a Smacker file to play it</span></div>
+</body>
+</html>

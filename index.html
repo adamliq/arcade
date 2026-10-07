@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Arcade</title>
+  <meta name="theme-color" content="#0b0d0a">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root { color-scheme: dark; }
+    body { margin: 0; min-height: 100vh; background: radial-gradient(900px 500px at 50% -10%, #1d2a17, transparent 60%), #0b0d0a; color: #e7e2d3; font: 15px/1.6 Inter, system-ui, sans-serif; }
+    main { max-width: 960px; margin: 0 auto; padding: 48px 16px; }
+    h1 { font: 700 clamp(30px, 5vw, 44px) Cinzel, Georgia, serif; letter-spacing: 0.08em; color: #d4b25a; margin: 0 0 4px; }
+    p.lead { color: #9a9a86; margin: 0 0 32px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+    a.card { display: block; text-decoration: none; color: inherit; background: #161b13; border: 1px solid #2a3324; border-radius: 14px; overflow: hidden; transition: transform .15s, border-color .15s; }
+    a.card:hover { transform: translateY(-3px); border-color: #8f7738; }
+    .art { aspect-ratio: 16 / 9; display: grid; place-items: center; background: linear-gradient(135deg, #233a1c, #120c18); font: 700 26px Cinzel, Georgia, serif; color: #d4b25a; letter-spacing: 0.06em; text-shadow: 0 2px 0 #000; }
+    .art b { color: #b3262d; }
+    .body { padding: 14px 16px 16px; }
+    .body h2 { margin: 0; font-size: 16px; }
+    .body p { margin: 4px 0 0; color: #9a9a86; font-size: 13px; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Arcade</h1>
+    <p class="lead">Classic games and demos, rebuilt to run in a modern browser.</p>
+    <div class="grid">
+      <a class="card" href="blood-and-magic/">
+        <div class="art"><span>Blood <b>&amp;</b> Magic</span></div>
+        <div class="body">
+          <h2>Blood &amp; Magic — 1996 preview</h2>
+          <p>Interplay's non-interactive DOS demo, played from its original Smacker data.</p>
+        </div>
+      </a>
+    </div>
+  </main>
+</body>
+</html>
